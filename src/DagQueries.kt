@@ -11,13 +11,12 @@ data class Operation(private val opCode: Int, private val node: Int, private val
     }
 }
 
-data class Node(private val name: Int) {
+data class Node(private val name: Int, private var value: Long = 0) {
     companion object Registry {
         val nodes = mutableMapOf<Int, Node>()
     }
 
     private val successors = mutableSetOf<Node>()
-    private var value: Long = 0
 
     init {
         nodes.put(name, this)
