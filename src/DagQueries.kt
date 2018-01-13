@@ -35,6 +35,7 @@ data class Node(private val name: Int, private var value: Long = 0) {
     }
 
     fun propagateValue(v: Long) {
+        value = v
         successors.forEach { it.propagateValue(v) }
     }
 
