@@ -2,16 +2,19 @@ import java.util.*
 
 
 data class Operation(private val opCode: Int, private val node: Int, private val param: Long? = null) {
-    fun run() {
-        when(opCode) {
-            1 -> Node.nodes[node]!!.propagateValue(param!!)
-            2 -> Node.nodes[node]!!.propagateConditionalValue(param!!)
-            3 -> Node.nodes[node]!!.printNode()
+    fun run(): String {
+        val ret: String
+        ret = when(opCode) {
+            1 -> { Node.nodes[node]!!.propagateValue(param!!); ""}
+            2 -> { Node.nodes[node]!!.propagateConditionalValue(param!!); ""}
+            3 -> Node.nodes[node]!!.value.toString()
+            else -> ""
         }
+        return ret
     }
 }
 
-data class Node(private val name: Int, private var value: Long = 0) {
+data class Node(private val name: Int, var value: Long = 0) {
     companion object Registry {
         val nodes = mutableMapOf<Int, Node>()
     }
@@ -39,10 +42,6 @@ data class Node(private val name: Int, private var value: Long = 0) {
         successors.forEach { it.propagateValue(v) }
     }
 
-
-    fun printNode() {
-        println(value)
-    }
 }
 
 fun readEdges(rawEdges: List<String>) {
@@ -63,7 +62,8 @@ fun run(numNodes: Int, rawEdges: List<String>, rawOps: List<String>) {
     (1..numNodes).forEach{Node(it)}
     readEdges(rawEdges)
     val ops = readOps(rawOps)
-    ops.forEach { it.run() }
+    var res = ops.map { it.run() }.filter { it.isNotEmpty() }.joinToString("\n")
+    print(res)
 }
 
 fun main(args: Array<String>) {
